@@ -17,10 +17,6 @@ import com.joshschriever.livenotes.fragment.KeySigDialogFragment;
 import com.joshschriever.livenotes.fragment.SaveDialogFragment;
 import com.joshschriever.livenotes.fragment.TimeDialogFragment;
 import com.joshschriever.livenotes.midi.AdaptedMidiMessage;
-import com.joshschriever.livenotes.midi.MidiDispatcher;
-import com.joshschriever.livenotes.midi.MidiMessageAdapter;
-import com.joshschriever.livenotes.midi.MidiPlayer;
-import com.joshschriever.livenotes.midi.MidiReceiver;
 import com.joshschriever.livenotes.musicxml.DurationHandler;
 import com.joshschriever.livenotes.musicxml.KeySigHandler;
 import com.joshschriever.livenotes.musicxml.MidiToXMLRenderer;
@@ -97,7 +93,7 @@ public class LiveNotesActivity extends Activity
     private ChooseOPDialog opdialog;
 
     private MidiToXMLRenderer midiToXMLRenderer;
-    private MidiReceiver midiReceiver;
+
 
     private DurationHandler durationHandler;
     private MusicXmlRenderer renderer;
@@ -387,7 +383,7 @@ public class LiveNotesActivity extends Activity
 
     private void continueInitialize() {
         initializeRenderer();
-        initializeMidi();
+
         onReadyToRecord();
     }
 
@@ -404,10 +400,6 @@ public class LiveNotesActivity extends Activity
         renderer = new MusicXmlRenderer(durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
     }
 
-    private void initializeMidi() {
-        midiReceiver = new MidiReceiver(this, new MidiDispatcher(
-                new MidiPlayer(), new MidiMessageAdapter(midiToXMLRenderer)));
-    }
 
     @Override
     public void onXMLUpdated() {
@@ -579,17 +571,12 @@ public class LiveNotesActivity extends Activity
         scoreView = null;
 
         midiToXMLRenderer = null;
-        closeMidiReceiver();
 
         longTapAction = Optional.empty();
     }
 
-    private void closeMidiReceiver() {
-        if (midiReceiver != null) {
-            midiReceiver.close();
-            midiReceiver = null;
-        }
-    }
+
+
 /*
     @Override
     public void onBackPressed() {
@@ -597,7 +584,6 @@ public class LiveNotesActivity extends Activity
 */
     @Override
     protected void onDestroy() {
-        closeMidiReceiver();
         super.onDestroy();
     }
     private note IntToNote (int value) throws IllegalArgumentException {
