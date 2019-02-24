@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/ic_menu_gallery"
+                        android:src="@drawable/ic_image_black_24dp"
                         android:tint="@color/black_overlay"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="60dp"
@@ -177,7 +177,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:src="@drawable/ic_menu_manage"
+                        android:src="@drawable/ic_edit_black_24dp"
                         android:tint="@color/black_overlay"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="60dp"
