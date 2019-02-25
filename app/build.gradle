@@ -51,5 +51,4 @@ dependencies {
 
     implementation 'net.sourceforge.streamsupport:streamsupport:1.5.2'
 
-
 }

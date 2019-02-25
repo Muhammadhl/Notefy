@@ -35,12 +35,7 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Checking for first time launch - before calling setContentView()
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (mSharedPref.getBoolean("isFirstRun",true)) {
-            launchHomeScreen();
-            finish();
-        }
+
 
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
@@ -120,7 +115,6 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        mSharedPref.edit().putBoolean("isFirstRun", false).commit();
         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
         finish();
     }

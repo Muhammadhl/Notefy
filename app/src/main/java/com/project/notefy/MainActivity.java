@@ -1,9 +1,13 @@
 package com.project.notefy;
 
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -13,22 +17,65 @@ import android.widget.Toast;
 import com.joshschriever.livenotes.activity.LiveNotesActivity;
 import com.todobom.opennotescanner.GalleryGridActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import java8.util.J8Arrays;
 import uk.co.dolphin_com.seescoreandroid.PlayerActivity;
+
+import static java8.util.stream.StreamSupport.stream;
 
 public class MainActivity extends AppCompatActivity {
 
     GridLayout mainGrid;
+    private static final List<String> REQUIRED_PERMISSIONS = new ArrayList<>();
+    private static final int PERMISSION_REQUEST_ALL_REQUIRED = 1;
+
+    static {
+        REQUIRED_PERMISSIONS.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        REQUIRED_PERMISSIONS.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        REQUIRED_PERMISSIONS.add(Manifest.permission.CAMERA);
+        REQUIRED_PERMISSIONS.add(Manifest.permission.INTERNET);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Making notification bar transparent
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+
         setContentView(R.layout.activity_main);
+        if (savedInstanceState == null) {
+            checkPermissions();
+        }
 
         mainGrid = (GridLayout) findViewById(R.id.mainGrid);
 
         //Set Event
         setSingleEvent(mainGrid);
         //setToggleEvent(mainGrid);
+    }
+
+    private void checkPermissions() {
+        String[] permissionsToRequest = stream(REQUIRED_PERMISSIONS)
+                .filter(s -> checkSelfPermission(s) == PackageManager.PERMISSION_DENIED)
+                .toArray(String[]::new);
+        if (permissionsToRequest.length > 0) {
+            requestPermissions(permissionsToRequest, PERMISSION_REQUEST_ALL_REQUIRED);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] results) {
+        if (results.length > 0
+                && J8Arrays.stream(results).allMatch(r -> r == PackageManager.PERMISSION_GRANTED)) {
+        } else {
+            checkPermissions();
+        }
     }
 
     private void setToggleEvent(GridLayout mainGrid) {
@@ -64,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //Intent intent = new Intent(MainActivity.this, OpenNoteScannerActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this , CameraActivity.class);
+                startActivity(intent);
             }
         });
 
