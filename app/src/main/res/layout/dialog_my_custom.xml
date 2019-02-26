@@ -80,18 +80,18 @@
                 android:layout_height="wrap_content">
 
 
-                <Button
+                <ImageButton
                     android:id="@+id/diese"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    android:text="#"/>
+                    android:src="@drawable/dieze" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/bemol"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
-                    android:text="bl"/>
+                    android:src="@drawable/bemol" />
 
             </FrameLayout>
 
