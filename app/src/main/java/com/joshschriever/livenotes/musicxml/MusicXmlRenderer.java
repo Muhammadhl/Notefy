@@ -1,12 +1,9 @@
 package com.joshschriever.livenotes.musicxml;
 
-import android.util.Log;
+
 import android.util.SparseArray;
 
-import com.project.notefy.R;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,14 +15,12 @@ import java8.util.function.Consumer;
 import java8.util.function.Predicate;
 import java8.util.stream.Stream;
 import nu.xom.Attribute;
-import nu.xom.Builder;
+
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
-import nu.xom.ParsingException;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
 import static java8.util.Comparators.comparingInt;
 import static java8.util.function.Predicates.negate;
 import static java8.util.stream.Collectors.toList;
@@ -45,7 +40,6 @@ public class MusicXmlRenderer implements SimpleParserListener {
     private Document document;
     private Element elRoot;
     private Element elPart;
-    //private Element OldMeasure
     private Element elCurMeasure;
     private List<Element> LastElNoteAdded = new ArrayList<>();
 
