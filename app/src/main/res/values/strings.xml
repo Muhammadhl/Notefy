@@ -102,6 +102,7 @@
     <string name="equals">=</string>
     <string name="tempo">Tempo</string>
     <string name="ok">OK</string>
+    <string name="new_file">New score</string>
 
     <string name="precision_dialog_title">Set Precision</string>
     <string name="shortest_note_to_recognize">Shortest note to recognize:</string>
@@ -111,6 +112,7 @@
     <string name="quarter">Quarter</string>
 
     <string name="key_sig_dialog_title">Set Key Signature</string>
+    <string name="choose_file_dialog_title">Choose score to edit</string>
     <string name="major">Major</string>
     <string name="minor">Minor</string>
 
@@ -130,4 +132,7 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="error_saving">Error saving file</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

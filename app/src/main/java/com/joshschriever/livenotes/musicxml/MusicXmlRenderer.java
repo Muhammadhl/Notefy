@@ -1,7 +1,12 @@
 package com.joshschriever.livenotes.musicxml;
 
+import android.util.Log;
 import android.util.SparseArray;
 
+import com.project.notefy.R;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,11 +18,14 @@ import java8.util.function.Consumer;
 import java8.util.function.Predicate;
 import java8.util.stream.Stream;
 import nu.xom.Attribute;
+import nu.xom.Builder;
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.ParsingException;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
 import static java8.util.Comparators.comparingInt;
 import static java8.util.function.Predicates.negate;
 import static java8.util.stream.Collectors.toList;
@@ -33,13 +41,14 @@ public class MusicXmlRenderer implements SimpleParserListener {
         BEAT_UNIT_STRINGS.put(8, "eighth");
     }
 
+
     private Document document;
     private Element elRoot;
     private Element elPart;
     //private Element OldMeasure
     private Element elCurMeasure;
     private List<Element> LastElNoteAdded = new ArrayList<>();
-    private Note LastNoteAdded;
+
 
     private final DurationHandler durationHandler;
     private final long margin;
@@ -475,7 +484,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
         return tie != null && tie.getAttributeValue("type").equals("stop");
     }
 
-    private static Predicate<Element> isRest =
+    public static Predicate<Element> isRest =
             noteElement -> noteElement.getFirstChildElement("rest") != null;
 
     private static Predicate<Element> restMatches(int staff, int duration) {
@@ -525,7 +534,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
         return elPart.getChildElements("measure");
     }
 
-    private static Stream<Element> streamElements(Elements elements) {
+    public static Stream<Element> streamElements(Elements elements) {
         return stream(new ElementsSpliterator(elements), false);
     }
 

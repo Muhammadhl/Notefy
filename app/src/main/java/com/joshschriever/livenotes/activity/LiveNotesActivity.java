@@ -16,12 +16,14 @@ import com.joshschriever.livenotes.enumeration.LongTapAction;
 import com.joshschriever.livenotes.fragment.KeySigDialogFragment;
 import com.joshschriever.livenotes.fragment.SaveDialogFragment;
 import com.joshschriever.livenotes.fragment.TimeDialogFragment;
+import com.joshschriever.livenotes.fragment.ChooseFileFragment;
 import com.joshschriever.livenotes.midi.AdaptedMidiMessage;
 import com.joshschriever.livenotes.musicxml.DurationHandler;
 import com.joshschriever.livenotes.musicxml.KeySigHandler;
 import com.joshschriever.livenotes.musicxml.MidiToXMLRenderer;
 import com.joshschriever.livenotes.musicxml.MusicXmlRenderer;
 import com.joshschriever.livenotes.musicxml.Note;
+import com.joshschriever.livenotes.musicxml.SimpleNote;
 import com.project.notefy.R;
 
 import java.io.File;
@@ -31,6 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import java8.util.Optional;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.ParsingException;
 import uk.co.dolphin_com.seescoreandroid.CursorView;
 import uk.co.dolphin_com.seescoreandroid.SeeScoreView;
 import uk.co.dolphin_com.sscore.Component;
@@ -46,7 +52,10 @@ import static com.joshschriever.livenotes.activity.note.LA;
 import static com.joshschriever.livenotes.activity.note.ME;
 import static com.joshschriever.livenotes.activity.note.RE;
 import static com.joshschriever.livenotes.activity.note.SOL;
+import static com.joshschriever.livenotes.musicxml.MusicXmlRenderer.isRest;
+import static com.joshschriever.livenotes.musicxml.MusicXmlRenderer.streamElements;
 import static java8.util.J8Arrays.stream;
+import static java8.util.function.Predicates.negate;
 import static java8.util.stream.Collectors.toList;
 import static java8.util.stream.StreamSupport.stream;
 import static uk.co.dolphin_com.seescoreandroid.LicenceKeyInstance.SeeScoreLibKey;
@@ -59,7 +68,8 @@ public class LiveNotesActivity extends Activity
         TimeDialogFragment.Callbacks,
         KeySigDialogFragment.Callbacks,
         MyCustomDialog.Callbacks,
-        ChooseOPDialog.Callbacks {
+        ChooseOPDialog.Callbacks,
+        ChooseFileFragment.Callbacks {
 
 
     private static final String KEY_BEATS = "keyBeats";
@@ -74,7 +84,7 @@ public class LiveNotesActivity extends Activity
     private static final String TAG_SAVE_DIALOG = "tagSaveDialog";
     private static final String TAG_TIME_DIALOG = "tagTimeDialog";
     private static final String TAG_KEY_SIG_DIALOG = "tagKeySigDialog";
-    private static final String TAG_PRECISION_DIALOG = "tagPrecisionDialog";
+    private static final String TAG_CHOOSE_FILE_DIALOG = "tagChooseFileDialog";
 
     private static final LoadOptions LOAD_OPTIONS = new LoadOptions(SeeScoreLibKey, true);
     private static final int PERMISSION_REQUEST_ALL_REQUIRED = 1;
@@ -97,6 +107,7 @@ public class LiveNotesActivity extends Activity
 
     private DurationHandler durationHandler;
     private MusicXmlRenderer renderer;
+    private MusicXmlRenderer import_renderer;
 
     private Optional<LongTapAction> longTapAction = Optional.empty();
 
@@ -198,7 +209,8 @@ public class LiveNotesActivity extends Activity
         opdialog = new ChooseOPDialog();
         dialog = new MyCustomDialog();
         initializeScoreView();
-        new TimeDialogFragment().show(getFragmentManager(), TAG_TIME_DIALOG);
+        //new TimeDialogFragment().show(getFragmentManager(), TAG_TIME_DIALOG);
+        new ChooseFileFragment().show(getFragmentManager(), TAG_CHOOSE_FILE_DIALOG);
     }
 /*
     private void initializeScoreView() {
@@ -223,10 +235,72 @@ public class LiveNotesActivity extends Activity
     }
 
     @Override
+    public void onFileSet(String filename, boolean new_file) {
+        if(new_file) {
+            new TimeDialogFragment().show(getFragmentManager(), TAG_TIME_DIALOG);
+        }
+        else {
+            readXMLProperties(filename);
+            continueInitialize();
+        }
+    }
+
+    public void readXMLProperties(String filename) {
+        File path = getExternalStoragePublicDirectory("Notefy/Scores");
+        File file = new File(path, filename);
+        Builder builder = new Builder();
+        Document doc;
+        ArrayList<SimpleNote> notes = new ArrayList<>();
+        try {
+            doc = builder.build(file);
+            Element root = doc.getRootElement();
+            Element part = root.getFirstChildElement("part");
+            Element first_measure = part.getFirstChildElement("measure");
+            Element attributes = first_measure.getFirstChildElement("attributes");
+            Element key = attributes.getFirstChildElement("key");
+            Element time = attributes.getFirstChildElement("time");
+            Element direction = first_measure.getFirstChildElement("direction");
+            Element direction_type = direction.getFirstChildElement("direction-type");
+            Element metronome = direction_type.getFirstChildElement("metronome");
+            this.keyFifths = Integer.parseInt(key.getFirstChildElement("fifths").getValue());
+            this.keyIsMajor = key.getFirstChildElement("mode").equals("major");
+            this.precision = 4;
+            this.timeSigBeats = Integer.parseInt(time.getFirstChildElement("beats").getValue());
+            this.timeSigBeatValue = Integer.parseInt(time.getFirstChildElement("beat-type").getValue());
+            this.tempoBPM = Integer.parseInt(metronome.getFirstChildElement("per-minute").getValue());
+
+
+
+            streamElements(part.getChildElements("measure")).
+                    forEach(measure ->
+                            streamElements(measure.getChildElements("note")).filter(negate(isRest)).
+                                    forEach(note -> notes.add(elementToNote(note))));
+
+
+        } catch (ParsingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private SimpleNote elementToNote(Element note) {
+        Element rest = note.getFirstChildElement("rest");
+        if(rest != null) return null;
+        Element pitch = note.getFirstChildElement("pitch");
+        Element octave = pitch.getFirstChildElement("octave");
+        Element step = pitch.getFirstChildElement("step");
+        Element type = note.getFirstChildElement("type");
+        return new SimpleNote(step.getValue(), Integer.parseInt(octave.getValue()), type.getValue());
+    }
+
+    @Override
     public void onTimeSet(int timeSigBeats, int timeSigBeatValue, int tempoBPM) {
         this.timeSigBeats = timeSigBeats;
         this.timeSigBeatValue = timeSigBeatValue;
         this.tempoBPM = tempoBPM;
+
+
 
         new KeySigDialogFragment().show(getFragmentManager(), TAG_KEY_SIG_DIALOG);
     }
@@ -398,6 +472,7 @@ public class LiveNotesActivity extends Activity
         onXMLUpdated();
         durationHandler = new DurationHandler(timeSigBeats, timeSigBeatValue, tempoBPM, precision);
         renderer = new MusicXmlRenderer(durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
+        //import_renderer = new MusicXmlRenderer("Composition_2019-02-24_14.40.39.xml",durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
     }
 
 
