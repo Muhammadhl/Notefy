@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 import com.project.notefy.R;
@@ -57,9 +58,9 @@ public class MyCustomDialog extends DialogFragment {
         _duration = 600;
 
         ///// exmaple how to handle button click
-        final Button bemol = (Button) view.findViewById(R.id.bemol);
+        final ToggleButton bemol = (ToggleButton) view.findViewById(R.id.bemol);
         //final Button bekar = (Button) view.findViewById(R.id.bekar);
-        final Button diese = (Button) view.findViewById(R.id.diese);
+        final ToggleButton diese = (ToggleButton) view.findViewById(R.id.diese);
         //final Button none = (Button) view.findViewById(R.id.none);
 
         final ImageButton whole = (ImageButton) view.findViewById(R.id.whole);
@@ -152,9 +153,9 @@ public class MyCustomDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 _sign = "diese";
-                diese.setEnabled(false);
+                diese.setChecked(true);
 
-                bemol.setEnabled(true);
+                bemol.setChecked(false);
 
 
             }
@@ -164,9 +165,9 @@ public class MyCustomDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 _sign = "bemol";
-                bemol.setEnabled(false);
+                bemol.setChecked(true);
 
-                diese.setEnabled(true);
+                diese.setChecked(false);
 
             }
         });

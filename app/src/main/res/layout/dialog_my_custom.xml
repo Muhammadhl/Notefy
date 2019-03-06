@@ -80,18 +80,24 @@
                 android:layout_height="wrap_content">
 
 
-                <ImageButton
+                <ToggleButton
                     android:id="@+id/diese"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/dieze" />
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="0sp"
+                    android:drawableTop="@drawable/dieze" />
 
-                <ImageButton
+                <ToggleButton
                     android:id="@+id/bemol"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
-                    android:src="@drawable/bemol" />
+                    android:textOff=""
+                    android:textOn=""
+                    android:textSize="0sp"
+                    android:drawableTop="@drawable/bemol" />
 
             </FrameLayout>
 
