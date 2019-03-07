@@ -77,6 +77,7 @@ public class ChooseFileFragment extends DialogFragment
     private void dismiss(boolean new_file) {
         if (new_file) {
             ((Callbacks) getActivity()).onFileSet(null, true);
+
         }
         else {
             ((Callbacks) getActivity()).onFileSet(files_list[file_name.getValue()], false);

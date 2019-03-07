@@ -241,6 +241,7 @@ public class LiveNotesActivity extends Activity
         }
         else {
             readXMLProperties(filename);
+
             continueInitialize();
         }
     }
