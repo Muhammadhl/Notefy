@@ -12,6 +12,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+
 import com.joshschriever.livenotes.enumeration.LongTapAction;
 import com.joshschriever.livenotes.fragment.KeySigDialogFragment;
 import com.joshschriever.livenotes.fragment.SaveDialogFragment;
@@ -122,6 +123,8 @@ public class LiveNotesActivity extends Activity
     private int _bottom_timestamp = 600;
     private List<Integer> _last_upper_duration = new ArrayList<Integer>();
     private List<Integer> _last_lower_duration = new ArrayList<Integer>();
+    private ArrayList<SimpleNote> notes_to_import = new ArrayList<>();
+
 
 
     @Override
@@ -243,6 +246,8 @@ public class LiveNotesActivity extends Activity
             readXMLProperties(filename);
 
             continueInitialize();
+
+            addImportedNotes();
         }
     }
 
@@ -251,7 +256,6 @@ public class LiveNotesActivity extends Activity
         File file = new File(path, filename);
         Builder builder = new Builder();
         Document doc;
-        ArrayList<SimpleNote> notes = new ArrayList<>();
         try {
             doc = builder.build(file);
             Element root = doc.getRootElement();
@@ -275,7 +279,7 @@ public class LiveNotesActivity extends Activity
             streamElements(part.getChildElements("measure")).
                     forEach(measure ->
                             streamElements(measure.getChildElements("note")).filter(negate(isRest)).
-                                    forEach(note -> notes.add(elementToNote(note))));
+                                    forEach(note -> notes_to_import.add(elementToNote(note))));
 
 
         } catch (ParsingException e) {
@@ -291,8 +295,12 @@ public class LiveNotesActivity extends Activity
         Element pitch = note.getFirstChildElement("pitch");
         Element octave = pitch.getFirstChildElement("octave");
         Element step = pitch.getFirstChildElement("step");
+        Element alter = pitch.getFirstChildElement("alter");
         Element type = note.getFirstChildElement("type");
-        return new SimpleNote(step.getValue(), Integer.parseInt(octave.getValue()), type.getValue());
+        if(alter == null){
+            return new SimpleNote(step.getValue(), Integer.parseInt(octave.getValue()), type.getValue(),0);
+        }
+        return new SimpleNote(step.getValue(), Integer.parseInt(octave.getValue()), type.getValue(),Integer.parseInt(alter.getValue()));
     }
 
     @Override
@@ -335,8 +343,7 @@ public class LiveNotesActivity extends Activity
         //_last_lower_duration.remove(0);
         _upper_timestamp -= _last_upper_duration.get(0);
         _last_upper_duration.remove(0);
-        renderer.removeLastMeasure();
-        //renderer.cleanup();
+
 
     }
 
@@ -347,6 +354,34 @@ public class LiveNotesActivity extends Activity
     @Override
     public void chooseSave() {
         saveScore();
+    }
+
+    private void addImportedNotes(){
+        for (SimpleNote note_to_import : notes_to_import){
+            int value = 0;
+            if(note_to_import.step.equals("C")){ value = 48; }
+            if(note_to_import.step.equals("D")){ value = 50; }
+            if(note_to_import.step.equals("E")){ value = 52; }
+            if(note_to_import.step.equals("F")){ value = 53; }
+            if(note_to_import.step.equals("G")){ value = 55; }
+            if(note_to_import.step.equals("A")){ value = 57; }
+            if(note_to_import.step.equals("B")){ value = 59; }
+
+            String sign="";
+            if(note_to_import.alter == 1)  { sign = "diese"; }
+            if(note_to_import.alter == -1) { sign = "bemol"; }
+
+            int duration = 0;
+            if(note_to_import.type.equals("whole"))    { duration = 2400; }
+            if(note_to_import.type.equals("half"))     { duration = 1200; }
+            if(note_to_import.type.equals("quarter"))  { duration = 600;  }
+            if(note_to_import.type.equals("eighth"))   { duration = 300;  }
+            if(note_to_import.type.equals("sixteenth")){ duration = 150; }
+            if(note_to_import.type.equals("thirty second")){ duration = 75; }
+
+            value += (12*(note_to_import.octave-4));
+            onClickAdd(value,sign,duration);
+        }
     }
 
 

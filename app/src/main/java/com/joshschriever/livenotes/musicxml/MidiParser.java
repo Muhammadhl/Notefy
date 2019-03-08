@@ -22,7 +22,8 @@ public class MidiParser {
     private final DurationHandler durationHandler;
     private final long margin;
     private final long fullMeasureLength;
-    private long currentMeasureStartTime;
+    private List<Long> currentMeasureStartTime = new ArrayList<>();
+
 
     public MidiParser(DurationHandler durationHandler) {
         this.durationHandler = durationHandler;
@@ -42,13 +43,13 @@ public class MidiParser {
     }
 
     public void startWithRests(long timeStamp) {
-        currentMeasureStartTime = timeStamp;
+        currentMeasureStartTime.add(0,timeStamp);
         restOnEvent(timeStamp, true);
         restOnEvent(timeStamp, false);
     }
 
     public void startWithNote(long timeStamp, AdaptedMidiMessage message) {
-        currentMeasureStartTime = timeStamp;
+        currentMeasureStartTime.add(0,timeStamp);
         restOnEvent(timeStamp, message.data < 48);
         parse(timeStamp, message);
     }
@@ -60,8 +61,8 @@ public class MidiParser {
             }
         }
 
-        fireNoteEvent(restOffNoteFor(currentMeasureStartTime + fullMeasureLength, false));
-        fireNoteEvent(restOffNoteFor(currentMeasureStartTime + fullMeasureLength, true));
+        fireNoteEvent(restOffNoteFor(currentMeasureStartTime.get(0) + fullMeasureLength, false));
+        fireNoteEvent(restOffNoteFor(currentMeasureStartTime.get(0) + fullMeasureLength, true));
 
         tempRestRegistry[0] = 0L;
         tempRestRegistry[1] = 0L;
@@ -131,8 +132,8 @@ public class MidiParser {
     }
 
     private void doNoteOff(long timeStamp, Note note) {
-        if (timeStamp - currentMeasureStartTime >= fullMeasureLength + margin) {
-            long newMeasureTime = currentMeasureStartTime + fullMeasureLength;
+        if (timeStamp - currentMeasureStartTime.get(0) >= fullMeasureLength + margin) {
+            long newMeasureTime = currentMeasureStartTime.get(0) + fullMeasureLength;
             Note newNote = Note.newNote(newMeasureTime,
                                         note.durationMillis
                                                 - (newMeasureTime - tempNoteRegistry[note.value]),
@@ -148,16 +149,21 @@ public class MidiParser {
     }
 
     private void newMeasureIfNeededForNoteOn(long timeStamp) {
-        while (timeStamp - currentMeasureStartTime + margin >= fullMeasureLength) {
-            newMeasure(currentMeasureStartTime + fullMeasureLength);
+        while (timeStamp - currentMeasureStartTime.get(0) + margin >= fullMeasureLength) {
+            newMeasure(currentMeasureStartTime.get(0) + fullMeasureLength);
         }
     }
 
     private void newMeasure(long timeStamp) {
         stopCurrentNotesForMeasureBreak(timeStamp);
         fireMeasureEvent();
-        currentMeasureStartTime = timeStamp;
+        currentMeasureStartTime.add(0,timeStamp);
         restartNotesAfterMeasureBreak(timeStamp);
+    }
+
+    public void removeLastMeasure() {
+        //currentMeasureStartTime.remove(0);
+        int x; //for break point
     }
 
     private void stopCurrentNotesForMeasureBreak(long timeStamp) {

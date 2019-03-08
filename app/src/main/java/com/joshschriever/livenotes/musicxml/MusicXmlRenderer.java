@@ -1,8 +1,6 @@
 package com.joshschriever.livenotes.musicxml;
 
-
 import android.util.SparseArray;
-
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +13,6 @@ import java8.util.function.Consumer;
 import java8.util.function.Predicate;
 import java8.util.stream.Stream;
 import nu.xom.Attribute;
-
 import nu.xom.DocType;
 import nu.xom.Document;
 import nu.xom.Element;
@@ -36,17 +33,20 @@ public class MusicXmlRenderer implements SimpleParserListener {
         BEAT_UNIT_STRINGS.put(8, "eighth");
     }
 
-
     private Document document;
     private Element elRoot;
     private Element elPart;
+
+
     private Element elCurMeasure;
     private List<Element> LastElNoteAdded = new ArrayList<>();
-
+    private List<Element> LastElMeasureAdded = new ArrayList<>();
 
     private final DurationHandler durationHandler;
     private final long margin;
     private final KeySigHandler keySigHandler;
+
+    private Boolean wasLastMeasureDeleted = false;
 
     public MusicXmlRenderer(DurationHandler durationHandler, KeySigHandler keySigHandler) {
         this.durationHandler = durationHandler;
@@ -146,6 +146,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
             elDirection.appendChild(elDirectionType);
             elCurMeasure.appendChild(elDirection);
 
+            LastElMeasureAdded.add(0,elCurMeasure);
             elPart.appendChild(elCurMeasure);
         }
     }
@@ -176,6 +177,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
 
         elCurMeasure = new Element("measure");
         elCurMeasure.addAttribute(new Attribute("number", Integer.toString(nextNumber)));
+        LastElMeasureAdded.add(0,elCurMeasure);
         elPart.appendChild(elCurMeasure);
     }
 
@@ -222,7 +224,18 @@ public class MusicXmlRenderer implements SimpleParserListener {
     public boolean removeLastNote() {
         if(LastElNoteAdded.size() > 0) {
             Element NoteElToDelete = LastElNoteAdded.get(0);
+            Elements notesForMeasure = LastElMeasureAdded.get(0).getChildElements("note");
+            Boolean IsNoteInMeasure = false;
+
+            for(int i=0; i<notesForMeasure.size(); i++) {
+                if (notesForMeasure.get(i) == LastElNoteAdded.get(0)){
+                    IsNoteInMeasure = true;
+                }
+            }
             NoteElToDelete.getParent().removeChild(NoteElToDelete);
+            if(!IsNoteInMeasure){
+                removeLastMeasure();
+            }
             LastElNoteAdded.remove(0);
             LastElNoteAdded.remove(0);
             return true;
@@ -425,9 +438,18 @@ public class MusicXmlRenderer implements SimpleParserListener {
     }
 
     public void removeLastMeasure() {
-        Elements MeasuresList = elPart.getChildElements("measure");
-        //elPart.removeChild(elCurMeasure);
-        //MeasuresList.get(0);
+        elPart.removeChild(LastElMeasureAdded.get(0));
+        LastElMeasureAdded.remove(0);
+        elCurMeasure=LastElMeasureAdded.get(0);
+        wasLastMeasureDeleted = true;
+        }
+
+    public Boolean removeMeasureNeeded() {
+        if(wasLastMeasureDeleted) {
+            wasLastMeasureDeleted = false;
+            return true;
+        }
+        return false;
     }
 
     public void cleanup() {

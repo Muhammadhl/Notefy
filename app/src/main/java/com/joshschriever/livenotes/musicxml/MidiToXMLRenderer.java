@@ -69,6 +69,9 @@ public class MidiToXMLRenderer implements AdaptedMessageRecipient {
         boolean tmp = false;
         if (ready) {
             tmp = renderer.removeLastNote();
+            if(renderer.removeMeasureNeeded()) {
+                parser.removeLastMeasure();
+            }
             callbacks.onXMLUpdated();
         }
         return tmp;
