@@ -115,13 +115,14 @@
         tools:layout_editor_absoluteY="25dp">
 
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/whole"
-            android:layout_width="40dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitCenter"
-            android:src="@drawable/whole_note" />
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp"
+            android:drawableTop="@drawable/whole_note" />
 
         <ImageButton
             android:id="@+id/half"

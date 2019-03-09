@@ -387,6 +387,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
         for (int value : keySigHandler.stepIndices()) {
             Iterator<Element> notes = streamNotesInMeasure(measure)
                     .filter(noteMatchesAnyOctaveAnyAlter(value))
+                    .filter(noteHasAccidental())
                     .collect(toList())
                     .iterator();
 
@@ -412,6 +413,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
         }
 
         String last = accidentalOf(note);
+        if(last == null) return;
         if (keySigHandler.accidentalForNoteValue(value).equals(last)) {
             removeAccidentalFrom(note);
         }
@@ -434,7 +436,10 @@ public class MusicXmlRenderer implements SimpleParserListener {
     }
 
     private String accidentalOf(Element noteElement) {
-        return noteElement.getFirstChildElement("accidental").getValue();
+        if(noteElement.getFirstChildElement("accidental") != null) {
+            return noteElement.getFirstChildElement("accidental").getValue();
+        }
+        return null;
     }
 
     public void removeLastMeasure() {
@@ -520,6 +525,11 @@ public class MusicXmlRenderer implements SimpleParserListener {
     private Predicate<Element> noteMatchesAnyOctaveAnyAlter(int value) {
         return elNote -> elNote.getFirstChildElement("rest") == null
                 && pitchStepMatches(elNote.getFirstChildElement("pitch"), value);
+    }
+
+    private Predicate<Element> noteHasAccidental() {
+        return elNote -> elNote.getFirstChildElement("accidental") != null;
+
     }
 
     private boolean exactPitchMatches(Element elPitch, int value) {

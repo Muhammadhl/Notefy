@@ -162,8 +162,8 @@ public class MidiParser {
     }
 
     public void removeLastMeasure() {
-        //currentMeasureStartTime.remove(0);
-        int x; //for break point
+        currentMeasureStartTime.remove(0);
+        //int x; //for break point
     }
 
     private void stopCurrentNotesForMeasureBreak(long timeStamp) {

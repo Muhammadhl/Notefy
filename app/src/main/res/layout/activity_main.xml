@@ -20,9 +20,9 @@
         <GridLayout
             android:id="@+id/mainGrid"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="100dp"
-            android:layout_weight="8"
+            android:layout_height="match_parent"
+            android:layout_marginTop="150dp"
+            android:layout_marginBottom="100dp"
             android:alignmentMode="alignMargins"
             android:columnCount="1"
             android:columnOrderPreserved="false"
@@ -53,9 +53,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-
-                        android:layout_height="60dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/ic_camera_alt_black_24dp"
                         android:tint="@color/black_overlay" />
@@ -93,8 +92,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/ic_image_black_24dp"
                         android:tint="@color/black_overlay" />
@@ -135,8 +134,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/ic_play_circle_outline_black_24dp"
                         android:tint="@color/black_overlay" />
@@ -174,8 +173,8 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_horizontal"
                         android:src="@drawable/ic_edit_black_24dp"
                         android:tint="@color/black_overlay" />

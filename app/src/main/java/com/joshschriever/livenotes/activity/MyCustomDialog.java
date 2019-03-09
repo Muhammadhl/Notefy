@@ -2,6 +2,8 @@ package com.joshschriever.livenotes.activity;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -61,9 +63,11 @@ public class MyCustomDialog extends DialogFragment {
         final ToggleButton bemol = (ToggleButton) view.findViewById(R.id.bemol);
         //final Button bekar = (Button) view.findViewById(R.id.bekar);
         final ToggleButton diese = (ToggleButton) view.findViewById(R.id.diese);
+        diese.setChecked(false);
         //final Button none = (Button) view.findViewById(R.id.none);
 
-        final ImageButton whole = (ImageButton) view.findViewById(R.id.whole);
+        final ToggleButton whole = (ToggleButton) view.findViewById(R.id.whole);
+
         final ImageButton half = (ImageButton) view.findViewById(R.id.half);
         final ImageButton quarter = (ImageButton) view.findViewById(R.id.quarter);
         final ImageButton eight = (ImageButton) view.findViewById(R.id.eight);
@@ -152,9 +156,15 @@ public class MyCustomDialog extends DialogFragment {
         diese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _sign = "diese";
-                diese.setChecked(true);
+                if(diese.isChecked()) {
+                    _sign = "";
+                    diese.setChecked(false);
 
+                }
+                else {
+                    _sign = "diese";
+                    diese.setChecked(true);
+                }
                 bemol.setChecked(false);
 
 
