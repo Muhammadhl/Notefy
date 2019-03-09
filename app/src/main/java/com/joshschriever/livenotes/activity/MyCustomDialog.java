@@ -68,11 +68,11 @@ public class MyCustomDialog extends DialogFragment {
 
         final ToggleButton whole = (ToggleButton) view.findViewById(R.id.whole);
 
-        final ImageButton half = (ImageButton) view.findViewById(R.id.half);
-        final ImageButton quarter = (ImageButton) view.findViewById(R.id.quarter);
-        final ImageButton eight = (ImageButton) view.findViewById(R.id.eight);
-        final ImageButton sixteenth = (ImageButton) view.findViewById(R.id.sixteenth);
-        final ImageButton thirty_second = (ImageButton) view.findViewById(R.id.thirty_second);
+        final ToggleButton half = (ToggleButton) view.findViewById(R.id.half);
+        final ToggleButton quarter = (ToggleButton) view.findViewById(R.id.quarter);
+        final ToggleButton eight = (ToggleButton) view.findViewById(R.id.eight);
+        final ToggleButton sixteenth = (ToggleButton) view.findViewById(R.id.sixteenth);
+        final ToggleButton thirty_second = (ToggleButton) view.findViewById(R.id.thirty_second);
         final ImageView preview = (ImageView) view.findViewById(R.id.key_sig_image);
 
         preview.setImageResource(R.drawable.do1c);

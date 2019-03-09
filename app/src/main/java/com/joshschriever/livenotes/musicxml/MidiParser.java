@@ -193,6 +193,7 @@ public class MidiParser {
             if (tempNoteRegistry[n] != 0L) {
 
                 tempNoteTieRegistry[n] = true;
+
                 tempNoteRegistry[n] = timeStamp;
                 fireNoteEvent(Note.newNote(timeStamp, 0L, n).withEndOfTie(true).build());
             }

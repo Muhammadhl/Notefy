@@ -501,6 +501,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
     }
 
     private static boolean isEndOfTie(Element noteElement) {
+
         Element tie = noteElement.getFirstChildElement("tie");
 
         return tie != null && tie.getAttributeValue("type").equals("stop");

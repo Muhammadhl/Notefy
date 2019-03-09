@@ -172,6 +172,7 @@
             android:textOff=""
             android:textOn=""
             android:textSize="0sp"
+
             android:gravity="center"
             android:drawableTop="@drawable/sixteenth_note" />
 
