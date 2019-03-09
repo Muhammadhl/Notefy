@@ -84,10 +84,9 @@
                     android:id="@+id/diese"
                     android:layout_width="45dp"
                     android:layout_height="wrap_content"
-                    android:textOff=""
+                    android:drawableTop="@drawable/dieze"
                     android:textOn=""
-                    android:textSize="0sp"
-                    android:drawableTop="@drawable/dieze" />
+                    android:textSize="0sp" />
 
                 <ToggleButton
                     android:id="@+id/bemol"
@@ -115,54 +114,78 @@
         tools:layout_editor_absoluteY="25dp">
 
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/whole"
-            android:layout_width="40dp"
+            android:layout_width="44dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:drawableTop="@drawable/whole_note"
+            android:duplicateParentState="false"
             android:scaleType="fitCenter"
-            android:src="@drawable/whole_note" />
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp" />
 
-        <ImageButton
+
+        <ToggleButton
             android:id="@+id/half"
             android:layout_width="44dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:drawableTop="@drawable/half_note"
+            android:duplicateParentState="false"
+            android:foreground="@drawable/half_note"
+            android:foregroundGravity="fill_horizontal"
             android:scaleType="fitCenter"
-            android:src="@drawable/half_note" />
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp" />
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/quarter"
             android:layout_width="44dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:scaleType="fitCenter"
-            android:src="@drawable/quarter_note" />
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp"
+            android:drawableTop="@drawable/quarter_note" />
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/eight"
             android:layout_width="44dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:scaleType="fitCenter"
-            android:src="@drawable/eighth_note" />
+            android:drawableTop="@drawable/eighth_note"
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp"
+            tools:scaleType="center" />
 
-        <ImageButton
+
+        <ToggleButton
             android:id="@+id/sixteenth"
             android:layout_width="44dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:scaleType="fitCenter"
-            android:src="@drawable/sixteenth_note" />
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp"
+            android:gravity="center"
+            android:drawableTop="@drawable/sixteenth_note" />
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/thirty_second"
-            android:layout_width="40dp"
+            android:layout_width="44dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:scaleType="fitCenter"
-            android:src="@drawable/thirty_second_note" />
-
+            android:foreground="@drawable/thirty_second_note"
+            android:includeFontPadding="false"
+            android:scaleType="centerCrop"
+            android:textOn=""
+            android:textSize="0sp"
+            android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout

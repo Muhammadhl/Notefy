@@ -269,7 +269,7 @@ public class LiveNotesActivity extends Activity
             Element metronome = direction_type.getFirstChildElement("metronome");
             this.keyFifths = Integer.parseInt(key.getFirstChildElement("fifths").getValue());
             this.keyIsMajor = key.getFirstChildElement("mode").equals("major");
-            this.precision = 4;
+            this.precision = 1;
             this.timeSigBeats = Integer.parseInt(time.getFirstChildElement("beats").getValue());
             this.timeSigBeatValue = Integer.parseInt(time.getFirstChildElement("beat-type").getValue());
             this.tempoBPM = Integer.parseInt(metronome.getFirstChildElement("per-minute").getValue());
@@ -318,7 +318,7 @@ public class LiveNotesActivity extends Activity
     public void onKeySigSet(int fifths, boolean isMajor) {
         this.keyFifths = fifths;
         this.keyIsMajor = isMajor;
-        this.precision = 4;
+        this.precision = 1;
 
         continueInitialize();
 
@@ -376,8 +376,8 @@ public class LiveNotesActivity extends Activity
             if(note_to_import.type.equals("half"))     { duration = 1200; }
             if(note_to_import.type.equals("quarter"))  { duration = 600;  }
             if(note_to_import.type.equals("eighth"))   { duration = 300;  }
-            if(note_to_import.type.equals("sixteenth")){ duration = 150; }
-            if(note_to_import.type.equals("thirty second")){ duration = 75; }
+            if(note_to_import.type.equals("16th"))     { duration = 150;  }
+            if(note_to_import.type.equals("32th"))     { duration = 75;   }
 
             value += (12*(note_to_import.octave-4));
             onClickAdd(value,sign,duration);
@@ -402,91 +402,13 @@ public class LiveNotesActivity extends Activity
             _bottom_timestamp += duration;
             _last_lower_duration.add(duration);
         }
-
-        Toast.makeText(this, "value: " + value + " sign: " + sign + " duration: " + duration,
-                Toast.LENGTH_LONG).show();
     }
 
     private int UpdateValueAccordingToSign(int value, String sign) {
-        switch (IntToNote(value)) {
-            case DO: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case RE: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case ME: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case FA: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case SOL: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar") ) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case LA: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-            case CI: {
-                if (sign.equals("bemol"))  //key doesn't have bemol
-                    value--;
-                if (sign.equals("diese"))   //key doesn't have dieze
-                    value++;
-                if (sign.equals("bekar")) //key has bemol
-                    value++;
-                if (sign.equals("bekar"))  //key has dieze
-                    value--;
-                break;
-            }
-        }
+        if(sign.equals("bemol"))
+            value--;
+        if(sign.equals("diese"))
+            value++;
         return value;
     }
 

@@ -40,6 +40,9 @@ public class MyCustomDialog extends DialogFragment {
     public int _duration = 600;
     private static final String TAG = "MyCustomDialog";
 
+    private Boolean bemolIsChecked = false;
+    private Boolean dieseIsChecked = false;
+
 
     //widgets
     private TextView mActionOk, mActionCancel;
@@ -59,17 +62,23 @@ public class MyCustomDialog extends DialogFragment {
 
         ///// exmaple how to handle button click
         final ToggleButton bemol = (ToggleButton) view.findViewById(R.id.bemol);
-        //final Button bekar = (Button) view.findViewById(R.id.bekar);
+        bemol.setChecked(false);
+        bemolIsChecked = false;
+
         final ToggleButton diese = (ToggleButton) view.findViewById(R.id.diese);
+        diese.setChecked(false);
+        dieseIsChecked = false;
+
         //final Button none = (Button) view.findViewById(R.id.none);
 
-        final ImageButton whole = (ImageButton) view.findViewById(R.id.whole);
-        final ImageButton half = (ImageButton) view.findViewById(R.id.half);
-        final ImageButton quarter = (ImageButton) view.findViewById(R.id.quarter);
-        final ImageButton eight = (ImageButton) view.findViewById(R.id.eight);
-        final ImageButton sixteenth = (ImageButton) view.findViewById(R.id.sixteenth);
-        final ImageButton thirty_second = (ImageButton) view.findViewById(R.id.thirty_second);
+        final ToggleButton whole = (ToggleButton) view.findViewById(R.id.whole);
+        final ToggleButton half = (ToggleButton) view.findViewById(R.id.half);
+        final ToggleButton quarter = (ToggleButton) view.findViewById(R.id.quarter);
+        final ToggleButton eight = (ToggleButton) view.findViewById(R.id.eight);
+        final ToggleButton sixteenth = (ToggleButton) view.findViewById(R.id.sixteenth);
+        final ToggleButton thirty_second = (ToggleButton) view.findViewById(R.id.thirty_second);
         final ImageView preview = (ImageView) view.findViewById(R.id.key_sig_image);
+        quarter.setChecked(true); //default is quarter
 
         preview.setImageResource(R.drawable.do1c);
 
@@ -152,23 +161,34 @@ public class MyCustomDialog extends DialogFragment {
         diese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _sign = "diese";
-                diese.setChecked(true);
-
-                bemol.setChecked(false);
-
-
+                if(dieseIsChecked){
+                    _sign = "";
+                    diese.setChecked(false);
+                    dieseIsChecked = false;
+                } else {
+                    _sign = "diese";
+                    diese.setChecked(true);
+                    dieseIsChecked = true;
+                    bemol.setChecked(false);
+                    bemolIsChecked = false;
+                }
             }
         });
 
         bemol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _sign = "bemol";
-                bemol.setChecked(true);
-
-                diese.setChecked(false);
-
+                if(bemolIsChecked){
+                    _sign = "";
+                    bemol.setChecked(false);
+                    bemolIsChecked = false;
+                } else {
+                    _sign = "bemol";
+                    bemol.setChecked(true);
+                    bemolIsChecked = true;
+                    diese.setChecked(false);
+                    dieseIsChecked = false;
+                }
             }
         });
 
@@ -178,72 +198,72 @@ public class MyCustomDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 _duration = 2400;
-                whole.setEnabled(false);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(true);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         half.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 1200;
-                whole.setEnabled(true);
-                half.setEnabled(false);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(true);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         quarter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 600;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(false);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(true);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 300;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(false);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(true);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         sixteenth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 150;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(false);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(true);
+                thirty_second.setChecked(false);
             }
         });
         thirty_second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 75;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(false);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(true);
             }
         });
         return view;
