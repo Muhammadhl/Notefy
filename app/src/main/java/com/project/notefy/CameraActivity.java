@@ -46,7 +46,7 @@ public class CameraActivity extends AppCompatActivity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Notefy/Images/Pic.png");
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Notefy/Images/Pic_"+ String.valueOf(System.currentTimeMillis()) + ".png");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);

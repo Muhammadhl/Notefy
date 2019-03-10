@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 
@@ -48,14 +49,14 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        TouchImageView imgDisplay;
+        ImageView imgDisplay;
 
         LayoutInflater inflater = (LayoutInflater) _activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container,
                 false);
 
-        imgDisplay = (TouchImageView) viewLayout.findViewById(R.id.imgDisplay);
+        imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
 
         String imagePath = _imagePaths.get(position);
         /*

@@ -38,6 +38,7 @@ public class FullScreenViewActivity extends AppCompatActivity {
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setTitle(null);
@@ -52,7 +53,7 @@ public class FullScreenViewActivity extends AppCompatActivity {
         // initialize Universal Image Loader
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         mImageLoader = ImageLoader.getInstance();
-        //mImageLoader.destroy();
+        mImageLoader.destroy();
         mImageLoader.init(config);
 
         mMaxTexture = Utils.getMaxTextureSize();
@@ -140,7 +141,9 @@ public class FullScreenViewActivity extends AppCompatActivity {
             case R.id.action_delete:
                 deleteConfirmBuilder.create().show();
                 return true;
-
+            case R.id.action_share:
+                shareImage();
+                return true;
             default:
                 break;
         }
@@ -160,6 +163,16 @@ public class FullScreenViewActivity extends AppCompatActivity {
 
         //loadAdapter();
         //mViewPager.setCurrentItem(item);
+
+        finish();
+    }
+
+    private void shareImage() {
+        int item = mViewPager.getCurrentItem();
+
+        String filePath = mAdapter.getPath(item);
+
+
 
         finish();
     }

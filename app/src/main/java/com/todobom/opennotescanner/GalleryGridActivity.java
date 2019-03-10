@@ -43,7 +43,6 @@ public class GalleryGridActivity extends AppCompatActivity
 
     private static final String TAG = "GalleryGridActivity";
     private MenuItem mShare;
-    private MenuItem mTag;
     private MenuItem mDelete;
     private DragSelectRecyclerView recyclerView;
     private AlertDialog.Builder deleteConfirmBuilder;
@@ -74,6 +73,7 @@ public class GalleryGridActivity extends AppCompatActivity
     private void setSelectionMode(boolean selectionMode) {
         if (mDelete != null ) {
             mDelete.setVisible(selectionMode);
+            mShare.setVisible(selectionMode);
         }
         this.selectionMode = selectionMode;
     }
@@ -290,6 +290,9 @@ public class GalleryGridActivity extends AppCompatActivity
 
         mDelete = menu.findItem(R.id.action_delete);
         mDelete.setVisible(false);
+
+        mShare = menu.findItem(R.id.action_share);
+        mShare.setVisible(false);
 
         invalidateOptionsMenu();
 

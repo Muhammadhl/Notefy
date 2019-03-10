@@ -21,7 +21,7 @@ public class TCPClient {
 
     public void OpenConnection() {
         try {
-            MyClient = new Socket("104.248.19.125", PortNumber);
+            MyClient = new Socket("104.248.47.116", PortNumber);
             br = new DataInputStream(MyClient.getInputStream());
             bw = new DataOutputStream(MyClient.getOutputStream());
             System.out.println("Connected to server");
@@ -73,7 +73,7 @@ public class TCPClient {
             int size = br.readInt();
             String name = br.readUTF();
 
-            FileOutputStream stream = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/OpenNoteScanner/mxl/"+ name));
+            FileOutputStream stream = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/Notefy/Scores/"+ name));
 
             byte[] str = new byte[size];
             System.out.println("File " + name + " received!");

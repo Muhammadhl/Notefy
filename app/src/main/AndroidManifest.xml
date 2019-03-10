@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".CameraActivity" />
         <activity
             android:name="com.todobom.opennotescanner.GalleryGridActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -41,7 +41,7 @@
             android:name="uk.co.dolphin_com.seescoreandroid.PlayerActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
-            android:theme="@style/AppPlayerTheme"></activity>
+            android:theme="@style/AppPlayerTheme" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
