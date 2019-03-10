@@ -48,7 +48,7 @@ dependencies {
 
     implementation 'com.github.ctodobom:drag-select-recyclerview:0.3.4.ctodobom.sections'
     implementation 'com.github.nostra13:Android-Universal-Image-Loader:v1.9.5'
-
+    implementation 'com.github.MikeOrtiz:TouchImageView:1.4.0' // Support Lib
     implementation 'net.sourceforge.streamsupport:streamsupport:1.5.2'
 
 }
