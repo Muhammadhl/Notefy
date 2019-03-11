@@ -200,72 +200,72 @@ public class MyCustomDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 _duration = 2400;
-                whole.setEnabled(false);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(true);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         half.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 1200;
-                whole.setEnabled(true);
-                half.setEnabled(false);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(true);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         quarter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 600;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(false);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(true);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 300;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(false);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(true);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(false);
             }
         });
         sixteenth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 150;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(false);
-                thirty_second.setEnabled(true);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(true);
+                thirty_second.setChecked(false);
             }
         });
         thirty_second.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 _duration = 75;
-                whole.setEnabled(true);
-                half.setEnabled(true);
-                quarter.setEnabled(true);
-                eight.setEnabled(true);
-                sixteenth.setEnabled(true);
-                thirty_second.setEnabled(false);
+                whole.setChecked(false);
+                half.setChecked(false);
+                quarter.setChecked(false);
+                eight.setChecked(false);
+                sixteenth.setChecked(false);
+                thirty_second.setChecked(true);
             }
         });
         return view;

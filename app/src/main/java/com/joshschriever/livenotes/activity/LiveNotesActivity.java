@@ -27,6 +27,8 @@ import com.joshschriever.livenotes.musicxml.Note;
 import com.joshschriever.livenotes.musicxml.SimpleNote;
 import com.project.notefy.R;
 
+
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -158,7 +160,7 @@ public class LiveNotesActivity extends Activity
             restoredXML = savedInstanceState.getString(KEY_MUSIC_XML);
             if (restoredXML != null) {
                 setScoreXML(restoredXML);
-                setLongTapAction(LongTapAction.SAVE, false);
+                //setLongTapAction(LongTapAction.SAVE, false);
             }
         }
     }
@@ -170,7 +172,7 @@ public class LiveNotesActivity extends Activity
             if (longTapAction.map(action -> action.equals(LongTapAction.START)).orElse(false)) {
                 outState.putBoolean(KEY_CAN_START, true);
             } else {
-                setLongTapAction(LongTapAction.SAVE, false);
+                //setLongTapAction(LongTapAction.SAVE, false);
             }
         }
 
@@ -266,13 +268,31 @@ public class LiveNotesActivity extends Activity
             Element time = attributes.getFirstChildElement("time");
             Element direction = first_measure.getFirstChildElement("direction");
             Element direction_type = direction.getFirstChildElement("direction-type");
-            Element metronome = direction_type.getFirstChildElement("metronome");
-            this.keyFifths = Integer.parseInt(key.getFirstChildElement("fifths").getValue());
-            this.keyIsMajor = key.getFirstChildElement("mode").equals("major");
+           /* Element metronome = direction_type.getFirstChildElement("metronome");
+            Element sound = direction.getFirstChildElement("sound");
+            String tempo = "";
+            if(sound != null) {
+                tempo = sound.getAttribute("tempo").getValue();
+            }*/
+            if(key != null) {
+                this.keyFifths = Integer.parseInt(key.getFirstChildElement("fifths").getValue());
+                this.keyIsMajor = key.getFirstChildElement("mode").equals("major");
+            }
+            else {
+                this.keyFifths = 0;
+                this.keyIsMajor = true;
+            }
+
             this.precision = 1;
             this.timeSigBeats = Integer.parseInt(time.getFirstChildElement("beats").getValue());
             this.timeSigBeatValue = Integer.parseInt(time.getFirstChildElement("beat-type").getValue());
-            this.tempoBPM = Integer.parseInt(metronome.getFirstChildElement("per-minute").getValue());
+          /*  if(metronome != null) {
+                this.tempoBPM = Integer.parseInt(metronome.getFirstChildElement("per-minute").getValue());
+            }
+            else {
+                this.tempoBPM = Integer.parseInt(tempo);
+            }*/
+            this.tempoBPM = 100;
 
 
 
@@ -357,6 +377,7 @@ public class LiveNotesActivity extends Activity
     }
 
     private void addImportedNotes(){
+
         for (SimpleNote note_to_import : notes_to_import){
             int value = 0;
             if(note_to_import.step.equals("C")){ value = 48; }
@@ -429,7 +450,7 @@ public class LiveNotesActivity extends Activity
                                                   precision);
         onXMLUpdated();
         durationHandler = new DurationHandler(timeSigBeats, timeSigBeatValue, tempoBPM, precision);
-        renderer = new MusicXmlRenderer(durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
+        //renderer = new MusicXmlRenderer(durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
         //import_renderer = new MusicXmlRenderer("Composition_2019-02-24_14.40.39.xml",durationHandler, new KeySigHandler(keyFifths, keyIsMajor));
     }
 
@@ -440,12 +461,12 @@ public class LiveNotesActivity extends Activity
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 80);
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 180);
     }
-
+/*
     public void onXMLUpdated2() {
         setScoreXML(renderer.getMusicXMLString());
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 80);
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 180);
-    }
+    }*/
 
     private void setScoreXML(String newXML) {
         try {
@@ -506,7 +527,7 @@ public class LiveNotesActivity extends Activity
         note = Note.newNote(0,80,54).build();
         pair = durationHandler.getNoteSequenceFromNote(note);
         renderer.noteEvent(pair.first, pair.second);
-        this.onXMLUpdated2();
+        onXMLUpdated();
     }
 
     @Override

@@ -86,6 +86,7 @@
                     android:layout_height="wrap_content"
                     android:drawableTop="@drawable/dieze"
                     android:textOn=""
+                    android:textOff=""
                     android:textSize="0sp" />
 
                 <ToggleButton
@@ -116,68 +117,65 @@
 
         <ToggleButton
             android:id="@+id/whole"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
-            android:drawableTop="@drawable/whole_note2"
-            android:duplicateParentState="false"
+
             android:textOff=""
             android:textOn=""
-            android:textSize="0sp" />
+            android:textSize="0sp"
+            android:drawableTop="@drawable/whole_note"/>
 
 
         <ToggleButton
             android:id="@+id/half"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
-            android:drawableTop="@drawable/half_note2"
-            android:duplicateParentState="false"
+
             android:textOff=""
             android:textOn=""
-            android:textSize="0sp" />
+            android:textSize="0sp"
+            android:drawableTop="@drawable/half_note"/>
 
         <ToggleButton
             android:id="@+id/quarter"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
+
             android:textOff=""
             android:textOn=""
             android:textSize="0sp"
-            android:drawableTop="@drawable/quarter_note2" />
+            android:drawableTop="@drawable/quarter_note"/>
 
         <ToggleButton
             android:id="@+id/eight"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
-            android:drawableTop="@drawable/eighth_note2"
+
             android:textOff=""
             android:textOn=""
             android:textSize="0sp"
-            tools:scaleType="center" />
+            android:drawableTop="@drawable/eighth_note"/>
 
 
         <ToggleButton
             android:id="@+id/sixteenth"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
+
             android:textOff=""
             android:textOn=""
             android:textSize="0sp"
-            android:drawableTop="@drawable/sixteenth_note2" />
+            android:drawableTop="@drawable/sixteenth_note"/>
 
         <ToggleButton
             android:id="@+id/thirty_second"
-            android:layout_width="44dp"
+            android:layout_width="45dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/cardview_light_background"
-            android:drawableTop="@drawable/thirty_second_note2"
+
+            android:textOff=""
             android:textOn=""
             android:textSize="0sp"
-            android:visibility="visible" />
+            android:drawableTop="@drawable/thirty_second_note"/>
     </LinearLayout>
 
     <LinearLayout

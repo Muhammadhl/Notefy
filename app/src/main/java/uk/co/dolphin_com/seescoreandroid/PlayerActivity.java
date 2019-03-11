@@ -4,8 +4,42 @@
  */
 package uk.co.dolphin_com.seescoreandroid;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import uk.co.dolphin_com.seescoreandroid.SeeScoreView.ZoomNotification;
+import uk.co.dolphin_com.sscore.BarGroup;
+import uk.co.dolphin_com.sscore.Component;
+import uk.co.dolphin_com.sscore.Header;
+import uk.co.dolphin_com.sscore.Item;
+import uk.co.dolphin_com.sscore.LoadOptions;
+import uk.co.dolphin_com.sscore.RenderItem;
+import uk.co.dolphin_com.sscore.SScore;
+import uk.co.dolphin_com.sscore.Tempo;
+import uk.co.dolphin_com.sscore.Version;
+import uk.co.dolphin_com.sscore.ex.ScoreException;
+import uk.co.dolphin_com.sscore.ex.XMLValidationException;
+import uk.co.dolphin_com.sscore.playdata.Note;
+import uk.co.dolphin_com.sscore.playdata.PlayData;
+import uk.co.dolphin_com.sscore.playdata.UserTempo;
 import android.app.Activity;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,35 +57,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.project.notefy.R;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import uk.co.dolphin_com.seescoreandroid.SeeScoreView.ZoomNotification;
-import uk.co.dolphin_com.sscore.Component;
-import uk.co.dolphin_com.sscore.Header;
-import uk.co.dolphin_com.sscore.LoadOptions;
-import uk.co.dolphin_com.sscore.RenderItem;
-import uk.co.dolphin_com.sscore.SScore;
-import uk.co.dolphin_com.sscore.Tempo;
-import uk.co.dolphin_com.sscore.ex.ScoreException;
-import uk.co.dolphin_com.sscore.ex.XMLValidationException;
-import uk.co.dolphin_com.sscore.playdata.Note;
-import uk.co.dolphin_com.sscore.playdata.PlayData;
-import uk.co.dolphin_com.sscore.playdata.UserTempo;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -406,8 +411,7 @@ public class PlayerActivity extends Activity {
 	/** Get all the .xml/.mxl files in the internal dir */
 	private List<File> getXMLFiles()
 	{
-		File internalDir = getExternalStoragePublicDirectory(getString(R.string.storage_dir));
-        // = getFilesDir();
+        File internalDir = getExternalStoragePublicDirectory(getString(R.string.storage_dir));
 		String[] files = internalDir.list(new FilenameFilter() {
 
             @Override
@@ -449,8 +453,7 @@ public class PlayerActivity extends Activity {
 		AssetManager am = getAssets();
 		try {
 			String[] files = am.list("");
-			//File internalDir = getFilesDir();
-            File internalDir = getExternalStoragePublicDirectory(getString(R.string.storage_dir));
+			File internalDir = getFilesDir();
 			for (String filename : files)
 			{
 				if (filename.endsWith(".xml") || filename.endsWith(".mxl") )
@@ -804,7 +807,7 @@ public class PlayerActivity extends Activity {
         hideBeat();
         setPlayButtonImage(PlayPause.play); // show play in menu
         showTranspose(score);
-        ArrayList<Boolean> parts = new ArrayList<Boolean>();
+        ArrayList parts = new ArrayList<Boolean>();
         if (isShowingSinglePart)
         {
             for (int i = 0; i < score.numParts(); ++i)

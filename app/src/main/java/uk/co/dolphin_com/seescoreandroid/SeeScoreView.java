@@ -186,7 +186,9 @@ public class SeeScoreView extends LinearLayout  {
 
 	protected void onSizeChanged (int w, int h, int oldw, int oldh)
 	{
-		if (w > 0 && score != null)
+		// do not relayout on additions of systems during layout
+		// We look for width change so this only does a relayout on rotating the device
+		if (w != oldw && score != null && (layoutThread == null || !layoutThread.isAlive()))
 		{
 			layout(score);
 		}
@@ -462,12 +464,13 @@ public class SeeScoreView extends LinearLayout  {
 			new Thread(new Runnable() { // start a thread to await completion of the abort
 				public void run()
 				{
-					{/*
+					{
 						try {
-							//layoutThread.join(); // await completion of abort
+							if (layoutThread != null)
+								layoutThread.join(); // await completion of abort
 						} catch (InterruptedException e) {
 							// don't care if interrupted during join
-						}*/
+						}
 						layoutThread = null;
 						new Handler(Looper.getMainLooper()).post(new Runnable(){
 
