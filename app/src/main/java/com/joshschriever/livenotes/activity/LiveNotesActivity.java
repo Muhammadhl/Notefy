@@ -212,7 +212,6 @@ public class LiveNotesActivity extends Activity
 
     private void initialize() {
         opdialog = new ChooseOPDialog();
-        dialog = new MyCustomDialog();
         initializeScoreView();
         //new TimeDialogFragment().show(getFragmentManager(), TAG_TIME_DIALOG);
         new ChooseFileFragment().show(getFragmentManager(), TAG_CHOOSE_FILE_DIALOG);
@@ -369,6 +368,7 @@ public class LiveNotesActivity extends Activity
 
     @Override
     public void chooseAdd() {
+        dialog = new MyCustomDialog();
         dialog.show(getFragmentManager(), "MyCustomDialog");
     }
     @Override

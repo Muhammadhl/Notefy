@@ -2,6 +2,7 @@ package com.joshschriever.livenotes.activity;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
@@ -49,6 +50,11 @@ public class MyCustomDialog extends DialogFragment {
     //widgets
     private TextView mActionOk, mActionCancel;
 
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+    }
 
     //vars
 
@@ -294,6 +300,7 @@ public class MyCustomDialog extends DialogFragment {
         }
         dismiss();
     }
+
 
     public interface Callbacks {
         void onClickAdd(int value, String sign, int duration);
