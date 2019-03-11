@@ -50,11 +50,6 @@ public class MyCustomDialog extends DialogFragment {
     //widgets
     private TextView mActionOk, mActionCancel;
 
-    @Override
-    public void onDismiss(final DialogInterface dialog) {
-        super.onDismiss(dialog);
-
-    }
 
     //vars
 
