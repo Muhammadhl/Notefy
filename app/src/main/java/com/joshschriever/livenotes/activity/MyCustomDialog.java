@@ -42,6 +42,9 @@ public class MyCustomDialog extends DialogFragment {
     public int _duration = 600;
     private static final String TAG = "MyCustomDialog";
 
+    private Boolean bemolIsChecked = false;
+    private Boolean dieseIsChecked = false;
+
 
     //widgets
     private TextView mActionOk, mActionCancel;
@@ -61,19 +64,26 @@ public class MyCustomDialog extends DialogFragment {
 
         ///// exmaple how to handle button click
         final ToggleButton bemol = (ToggleButton) view.findViewById(R.id.bemol);
-        //final Button bekar = (Button) view.findViewById(R.id.bekar);
+        bemol.setChecked(false);
+        bemolIsChecked = false;
+
         final ToggleButton diese = (ToggleButton) view.findViewById(R.id.diese);
         diese.setChecked(false);
-        //final Button none = (Button) view.findViewById(R.id.none);
+        dieseIsChecked = false;
 
         final ToggleButton whole = (ToggleButton) view.findViewById(R.id.whole);
-
         final ToggleButton half = (ToggleButton) view.findViewById(R.id.half);
         final ToggleButton quarter = (ToggleButton) view.findViewById(R.id.quarter);
         final ToggleButton eight = (ToggleButton) view.findViewById(R.id.eight);
         final ToggleButton sixteenth = (ToggleButton) view.findViewById(R.id.sixteenth);
         final ToggleButton thirty_second = (ToggleButton) view.findViewById(R.id.thirty_second);
         final ImageView preview = (ImageView) view.findViewById(R.id.key_sig_image);
+        quarter.setChecked(true);
+        half.setChecked(false);
+        whole.setChecked(false);
+        eight.setChecked(false);
+        sixteenth.setChecked(false);
+        thirty_second.setChecked(false);
 
         preview.setImageResource(R.drawable.do1c);
 
@@ -151,37 +161,39 @@ public class MyCustomDialog extends DialogFragment {
         });
 
 
-
-
         diese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(diese.isChecked()) {
+                if(dieseIsChecked){
                     _sign = "";
                     diese.setChecked(false);
-
-                }
-                else {
+                    dieseIsChecked = false;
+                } else {
                     _sign = "diese";
                     diese.setChecked(true);
+                    dieseIsChecked = true;
+                    bemol.setChecked(false);
+                    bemolIsChecked = false;
                 }
-                bemol.setChecked(false);
-
-
             }
         });
 
         bemol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                _sign = "bemol";
-                bemol.setChecked(true);
-
-                diese.setChecked(false);
-
+                if(bemolIsChecked){
+                    _sign = "";
+                    bemol.setChecked(false);
+                    bemolIsChecked = false;
+                } else {
+                    _sign = "bemol";
+                    bemol.setChecked(true);
+                    bemolIsChecked = true;
+                    diese.setChecked(false);
+                    dieseIsChecked = false;
+                }
             }
         });
-
 
 
         whole.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +296,6 @@ public class MyCustomDialog extends DialogFragment {
     }
 
     public interface Callbacks {
-
         void onClickAdd(int value, String sign, int duration);
     }
 

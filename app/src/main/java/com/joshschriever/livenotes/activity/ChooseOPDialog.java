@@ -18,19 +18,11 @@ import com.project.notefy.R;
 public class ChooseOPDialog extends DialogFragment {
 
     private static final String TAG = "ChooseOPDialog";
-
-
-
-
-
     //vars
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.choose_opdialog, container, false);
-
-
 
         final Button delete = (Button) view.findViewById(R.id.delete);
         final Button add = (Button) view.findViewById(R.id.add_note);
