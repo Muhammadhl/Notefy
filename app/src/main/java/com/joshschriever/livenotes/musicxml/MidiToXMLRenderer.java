@@ -55,7 +55,7 @@ public class MidiToXMLRenderer implements AdaptedMessageRecipient {
         if (ready) {
             if (!recording) {
                 recording = true;
-                callbacks.onStartRecording();
+                //callbacks.onStartRecording();
 
                 parser.startWithNote(timeStamp, message);
             } else {

@@ -45,7 +45,7 @@ public class MidiParser {
     public void startWithRests(long timeStamp) {
         currentMeasureStartTime.add(0,timeStamp);
         restOnEvent(timeStamp, true);
-        restOnEvent(timeStamp, false);
+        //restOnEvent(timeStamp, false);
     }
 
     public void startWithNote(long timeStamp, AdaptedMidiMessage message) {
@@ -116,7 +116,7 @@ public class MidiParser {
         newMeasureIfNeededForNoteOn(timeStamp);
 
         tempRestRegistry[trebleClef ? 1 : 0] = timeStamp;
-        fireNoteEvent(Note.newRest(timeStamp, 0L, trebleClef).build());
+        if(trebleClef) fireNoteEvent(Note.newRest(timeStamp, 0L, trebleClef).build());
     }
 
     private void restOffEvent(long timeStamp, boolean trebleClef) {

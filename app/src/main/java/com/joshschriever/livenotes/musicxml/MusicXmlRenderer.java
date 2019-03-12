@@ -97,7 +97,8 @@ public class MusicXmlRenderer implements SimpleParserListener {
 
             Element elAttributes = new Element("attributes");
             Element elDivisions = new Element("divisions");
-            elDivisions.appendChild(Integer.toString(DurationHandler.DIVISIONS_PER_BEAT));
+            //elDivisions.appendChild(Integer.toString(DurationHandler.DIVISIONS_PER_BEAT));
+            elDivisions.appendChild("8");
             elAttributes.appendChild(elDivisions);
 
             Element elKey = new Element("key");
@@ -119,10 +120,10 @@ public class MusicXmlRenderer implements SimpleParserListener {
             elAttributes.appendChild(elTime);
 
             Element elStaves = new Element("staves");
-            elStaves.appendChild("2");
+            elStaves.appendChild("1");
             elAttributes.appendChild(elStaves);
             elAttributes.appendChild(clefElementFrom(1, "G", 2));
-            elAttributes.appendChild(clefElementFrom(2, "F", 4));
+//            elAttributes.appendChild(clefElementFrom(2, "F", 4));
 
             elCurMeasure.appendChild(elAttributes);
 
