@@ -121,8 +121,8 @@ public class LiveNotesActivity extends Activity
     private boolean keyIsMajor;
     private int precision;
     private String restoredXML;
-    private int _upper_timestamp = 600;
-    private int _bottom_timestamp = 600;
+    private int _upper_timestamp = 0;
+    private int _bottom_timestamp = 0;
     private List<Integer> _last_upper_duration = new ArrayList<Integer>();
     private List<Integer> _last_lower_duration = new ArrayList<Integer>();
     private ArrayList<SimpleNote> notes_to_import = new ArrayList<>();
@@ -358,12 +358,8 @@ public class LiveNotesActivity extends Activity
                     Toast.LENGTH_LONG).show();
             return;
         }
-        //_bottom_timestamp -= _last_lower_duration.get(0);
-        //_last_lower_duration.remove(0);
         _upper_timestamp -= _last_upper_duration.get(0);
         _last_upper_duration.remove(0);
-
-
     }
 
     @Override
@@ -373,6 +369,7 @@ public class LiveNotesActivity extends Activity
     }
     @Override
     public void chooseSave() {
+        stopRecording();
         saveScore();
     }
 
@@ -415,13 +412,13 @@ public class LiveNotesActivity extends Activity
             midiToXMLRenderer.messageReady(noteOn(value), _upper_timestamp);
             midiToXMLRenderer.messageReady(noteOff(value), _upper_timestamp + duration);
             _upper_timestamp += duration;
-            _last_upper_duration.add(duration);
+            _last_upper_duration.add(0,duration);
 
         } else {
             midiToXMLRenderer.messageReady(noteOn(value), _bottom_timestamp);
             midiToXMLRenderer.messageReady(noteOff(value), _bottom_timestamp + duration);
             _bottom_timestamp += duration;
-            _last_lower_duration.add(duration);
+            _last_lower_duration.add(0,duration);
         }
     }
 
@@ -461,12 +458,7 @@ public class LiveNotesActivity extends Activity
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 80);
         scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 180);
     }
-/*
-    public void onXMLUpdated2() {
-        setScoreXML(renderer.getMusicXMLString());
-        scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 80);
-        scrollView.postDelayed(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN), 180);
-    }*/
+
 
     private void setScoreXML(String newXML) {
         try {
@@ -491,13 +483,10 @@ public class LiveNotesActivity extends Activity
     private void onReadyToRecord() {
         midiToXMLRenderer.setReady();
         setLongTapAction(LongTapAction.CHOOSE, true);
-        //setLongTapAction(LongTapAction.START, false);
-        //showToast(R.string.start_playing_or_long_press, Toast.LENGTH_LONG);
     }
 
     @Override
     public void onStartRecording() {
-        //setLongTapAction(LongTapAction.STOP, false);
     }
 
     @Override
@@ -512,33 +501,16 @@ public class LiveNotesActivity extends Activity
 
     @Override
     public void startRecording() {
-        //midiToXMLRenderer.startRecording();
-        //setLongTapAction(LongTapAction.STOP, true);
-        Note note = Note.newNote(0,1,48).build();
-        Pair<Note, List<Note>> pair = durationHandler.getNoteSequenceFromNote(note);
-        renderer.noteEvent(pair.first, pair.second);
-        //this.onXMLUpdated2();
-
-        note = Note.newNote(0,80,52).build();
-        pair = durationHandler.getNoteSequenceFromNote(note);
-        renderer.noteEvent(pair.first, pair.second);
-        //this.onXMLUpdated2();
-
-        note = Note.newNote(0,80,54).build();
-        pair = durationHandler.getNoteSequenceFromNote(note);
-        renderer.noteEvent(pair.first, pair.second);
-        onXMLUpdated();
+        midiToXMLRenderer.startRecording();
     }
 
     @Override
     public void stopRecording() {
-        //midiToXMLRenderer.stopRecording();
-        //setLongTapAction(LongTapAction.SAVE, true);
+        midiToXMLRenderer.stopRecording();
     }
 
     @Override
     public void saveScore() {
-        //clearLongTapAction();
         new SaveDialogFragment().show(getFragmentManager(), TAG_SAVE_DIALOG);
     }
 
