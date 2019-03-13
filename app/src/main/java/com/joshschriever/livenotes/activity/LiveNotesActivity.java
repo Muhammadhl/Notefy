@@ -125,7 +125,7 @@ public class LiveNotesActivity extends Activity
     private int _bottom_timestamp = 0;
     private List<Integer> _last_upper_duration = new ArrayList<Integer>();
     private List<Integer> _last_lower_duration = new ArrayList<Integer>();
-    private ArrayList<SimpleNote> notes_to_import = new ArrayList<>();
+    private ArrayList<SimpleNote> notes_to_import;
 
 
 
@@ -293,7 +293,7 @@ public class LiveNotesActivity extends Activity
             }*/
             this.tempoBPM = 100;
 
-
+            notes_to_import = new ArrayList<>();
 
             streamElements(part.getChildElements("measure")).
                     forEach(measure ->
@@ -376,6 +376,7 @@ public class LiveNotesActivity extends Activity
     private void addImportedNotes(){
 
         for (SimpleNote note_to_import : notes_to_import){
+
             int value = 0;
             if(note_to_import.step.equals("C")){ value = 48; }
             if(note_to_import.step.equals("D")){ value = 50; }
@@ -398,25 +399,27 @@ public class LiveNotesActivity extends Activity
             if(note_to_import.type.equals("32th"))     { duration = 75;   }
 
             value += (12*(note_to_import.octave-4));
-            onClickAdd(value,sign,duration);
+            onClickAdd(value,sign,duration, true);
         }
+        onXMLUpdated();
+
     }
 
 
 
     @Override
-    public void onClickAdd(int value, String sign, int duration) {
+    public void onClickAdd(int value, String sign, int duration, boolean batch) {
         value = UpdateValueAccordingToSign(value,sign);
 
         if (value >= 48) {
-            midiToXMLRenderer.messageReady(noteOn(value), _upper_timestamp);
-            midiToXMLRenderer.messageReady(noteOff(value), _upper_timestamp + duration);
+            midiToXMLRenderer.messageReady(noteOn(value), _upper_timestamp, batch);
+            midiToXMLRenderer.messageReady(noteOff(value), _upper_timestamp + duration, batch);
             _upper_timestamp += duration;
             _last_upper_duration.add(0,duration);
 
         } else {
-            midiToXMLRenderer.messageReady(noteOn(value), _bottom_timestamp);
-            midiToXMLRenderer.messageReady(noteOff(value), _bottom_timestamp + duration);
+            midiToXMLRenderer.messageReady(noteOn(value), _bottom_timestamp, batch);
+            midiToXMLRenderer.messageReady(noteOff(value), _bottom_timestamp + duration, batch);
             _bottom_timestamp += duration;
             _last_lower_duration.add(0,duration);
         }

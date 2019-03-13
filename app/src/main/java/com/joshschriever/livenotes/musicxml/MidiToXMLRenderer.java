@@ -51,7 +51,7 @@ public class MidiToXMLRenderer implements AdaptedMessageRecipient {
     }
 
     @Override
-    public void messageReady(AdaptedMidiMessage message, long timeStamp) {
+    public void messageReady(AdaptedMidiMessage message, long timeStamp, boolean batch) {
         if (ready) {
             if (!recording) {
                 recording = true;
@@ -61,7 +61,7 @@ public class MidiToXMLRenderer implements AdaptedMessageRecipient {
             } else {
                 parser.parse(timeStamp, message);
             }
-            callbacks.onXMLUpdated();
+            if(batch == false) callbacks.onXMLUpdated();
         }
     }
 

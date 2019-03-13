@@ -291,14 +291,14 @@ public class MyCustomDialog extends DialogFragment {
 
     private void dismissAndAdd(boolean callback) {
         if (callback) {
-            ((MyCustomDialog.Callbacks) getActivity()).onClickAdd(getValue(), getSign(), getDuration());
+            ((MyCustomDialog.Callbacks) getActivity()).onClickAdd(getValue(), getSign(), getDuration(), false);
         }
         dismiss();
     }
 
 
     public interface Callbacks {
-        void onClickAdd(int value, String sign, int duration);
+        void onClickAdd(int value, String sign, int duration, boolean batch);
     }
 
     private note IntToNote (int value) throws IllegalArgumentException {
