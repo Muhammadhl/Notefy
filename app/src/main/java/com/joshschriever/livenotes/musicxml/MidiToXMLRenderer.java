@@ -3,6 +3,8 @@ package com.joshschriever.livenotes.musicxml;
 import com.joshschriever.livenotes.midi.AdaptedMessageRecipient;
 import com.joshschriever.livenotes.midi.AdaptedMidiMessage;
 
+import nu.xom.Element;
+
 public class MidiToXMLRenderer implements AdaptedMessageRecipient {
 
     private Callbacks callbacks;
@@ -80,6 +82,7 @@ public class MidiToXMLRenderer implements AdaptedMessageRecipient {
     public String getXML() {
         return renderer.getMusicXMLString();
     }
+
 
     public interface Callbacks {
 

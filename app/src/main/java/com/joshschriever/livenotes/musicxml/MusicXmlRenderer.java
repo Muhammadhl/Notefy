@@ -11,6 +11,7 @@ import java8.util.Spliterator;
 import java8.util.Spliterators.AbstractSpliterator;
 import java8.util.function.Consumer;
 import java8.util.function.Predicate;
+import java8.util.stream.Collectors;
 import java8.util.stream.Stream;
 import nu.xom.Attribute;
 import nu.xom.DocType;
@@ -78,6 +79,8 @@ public class MusicXmlRenderer implements SimpleParserListener {
                        .replaceAll("<duration>0</duration>",
                                    "<duration>1</duration>");
     }
+
+
 
     private void doFirstMeasure() {
         if (elPart == null) {
@@ -468,6 +471,7 @@ public class MusicXmlRenderer implements SimpleParserListener {
     private static Stream<Element> streamNotesInMeasure(Element measure) {
         return streamElements(measure.getChildElements("note"));
     }
+
 
     private Element backupForDuration(int duration) {
         Element elBackup = new Element("backup");

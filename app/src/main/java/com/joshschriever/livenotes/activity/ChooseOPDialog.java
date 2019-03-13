@@ -78,6 +78,7 @@ public class ChooseOPDialog extends DialogFragment {
         void chooseDelete();
         void chooseSave();
 
+
     }
 
 }

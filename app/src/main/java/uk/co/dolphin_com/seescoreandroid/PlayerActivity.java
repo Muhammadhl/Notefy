@@ -17,21 +17,16 @@ import java.io.OutputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import uk.co.dolphin_com.seescoreandroid.SeeScoreView.ZoomNotification;
-import uk.co.dolphin_com.sscore.BarGroup;
 import uk.co.dolphin_com.sscore.Component;
 import uk.co.dolphin_com.sscore.Header;
-import uk.co.dolphin_com.sscore.Item;
 import uk.co.dolphin_com.sscore.LoadOptions;
 import uk.co.dolphin_com.sscore.RenderItem;
 import uk.co.dolphin_com.sscore.SScore;
 import uk.co.dolphin_com.sscore.Tempo;
-import uk.co.dolphin_com.sscore.Version;
 import uk.co.dolphin_com.sscore.ex.ScoreException;
 import uk.co.dolphin_com.sscore.ex.XMLValidationException;
 import uk.co.dolphin_com.sscore.playdata.Note;
@@ -39,7 +34,6 @@ import uk.co.dolphin_com.sscore.playdata.PlayData;
 import uk.co.dolphin_com.sscore.playdata.UserTempo;
 import android.app.Activity;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -66,7 +60,7 @@ public class PlayerActivity extends Activity {
 
     private static final boolean UseNoteCursorIfPossible = true; // else bar cursor
 
-	private static final boolean ColourPlayedNotes = false;
+	private static final boolean ColourPlayedNotes = true;
 
     private static final int kMinTempoBPM = 30;
     private static final int kMaxTempoBPM = 240;
@@ -127,10 +121,6 @@ public class PlayerActivity extends Activity {
 	 */
 	private float magnification;
 
-	/**
-	 * set to prevent reentry during transpose
-	 */
-	private boolean isTransposing;
 
     /**
      * the player plays the music using MediaPlayer and supports handlers for synchronised events on bar start, beat and note start
@@ -179,7 +169,6 @@ public class PlayerActivity extends Activity {
         currentBar = 0;
         loopStart = loopEnd = -1;
         magnification = 1.0F;
-        isTransposing = false;
         if (reloadAssetsFiles)
             clearInternalDir();
         ssview = new SeeScoreView(this, cursorView, getAssets(), new ZoomNotification(){
@@ -229,8 +218,8 @@ public class PlayerActivity extends Activity {
             }
         });
         setContentView(R.layout.activity_main_player);
-        TextView versionText = (TextView)findViewById(R.id.versionLabel);
-        versionText.setText("SeeScoreLib Version:" + SScore.getVersion().toString());
+        //TextView versionText = (TextView)findViewById(R.id.versionLabel);
+        //versionText.setText("SeeScoreLib Version:" + SScore.getVersion().toString());
         hideBeat();
         final ScrollView sv = (ScrollView) findViewById(R.id.scrollView1);
         sv.addView(ssview);
@@ -709,7 +698,6 @@ public class PlayerActivity extends Activity {
         }
         currentBar = 0;
         clearLoop();
- 		isTransposing = false;
         isShowingSinglePart = false;
         SeekBar zoomSlider = (SeekBar) findViewById(R.id.zoomSlider);
         zoomSlider.setProgress(zoomToSliderPercent(ssview.getMagnification()));
@@ -752,27 +740,6 @@ public class PlayerActivity extends Activity {
 		return null;
 	}
 
-	/** show the text in the transpose TextView  */
-	private void setTransposeText(String text) {
-		TextView transposeTextView = (TextView) findViewById(R.id.transposeLabel);
-		transposeTextView.setText(text);
-	}
-
-	/**
-     * update the transpose TextView with the current transpose setting for the score
-	 *
-	 * @param score the score
-	 */
-	private void showTranspose(SScore score)
-	{
-		int semi = score.getTranspose();
-		if (semi == 0)
-			setTransposeText("");
-		else if (semi > 0)
-			setTransposeText("+" + Integer.toString(semi) + " semi");
-		else if (semi < 0)
-			setTransposeText(Integer.toString(semi) + " semi");
-	}
 
     private void setupTempoUI(SScore score)
     {
@@ -806,7 +773,6 @@ public class PlayerActivity extends Activity {
         }
         hideBeat();
         setPlayButtonImage(PlayPause.play); // show play in menu
-        showTranspose(score);
         ArrayList parts = new ArrayList<Boolean>();
         if (isShowingSinglePart)
         {
@@ -900,13 +866,6 @@ public class PlayerActivity extends Activity {
 
     /** enable or disable all menu items */
 	private void enableMenuItems(boolean enable) {
-        boolean canEnableSingleStaff =  isSelectedSinglePartWithMultiStaff();
-        final View LItem = findViewById(R.id.LButton);
-        final View RItem = findViewById(R.id.RButton);
-        if (LItem != null)
-            LItem.setEnabled(enable && canEnableSingleStaff);
-        if (RItem != null)
-            RItem.setEnabled(enable && canEnableSingleStaff);
         final View plusItem = findViewById(R.id.plus);
 		final View minusItem = findViewById(R.id.minus);
 		final View nextfileItem = findViewById(R.id.nextfile);
@@ -924,59 +883,6 @@ public class PlayerActivity extends Activity {
             stopButton.setEnabled(enable);
     }
 
-	/**
-	 * transpose in a background thread
-	 *
-	 * @param transpose +1/-1 to transpose up/down one semitone from the current transpose setting
-	 */
-	private void backgroundTranspose(final int transpose)
-	{
-		if (!isTransposing)
-		{
-			isTransposing = true;
-			enableMenuItems(false); // disable menu until transpose is complete
-			new Thread(new Runnable(){ // load file on background thread
-				public void run()
-				{
-                    if (player != null) {
-                        player.reset();
-                        player = null;
-                    }
-                    currentBar = 0;
-                    clearLoop();
-					if (currentScore != null)
-					{
-						try
-						{
-							currentScore.setTranspose(currentScore.getTranspose() + transpose);
-							new Handler(Looper.getMainLooper()).post(new Runnable(){
-								public void run()
-								{// relayout after transpose
-                                    showScore(currentScore, new Runnable()
-                                    {
-                                        public void run() {
-                                            isTransposing = false;
-                                            enableMenuItems(true); // reenable menu only when layout is complete (there is a problem with transpose during layout)
-                                        }
-                                    });
-								}
-							});
-						} catch(ScoreException e) {
-							System.out.println(" exception from setTranspose:" + e.toString());
-							isTransposing = false;
-							enableMenuItems(true); // reenable menu
-						}
-					}
-					else
-					{
-						isTransposing = false;
-						enableMenuItems(true); // reenable menu
-					}
-
-				}
-			}).start();
-		}
-	}
 
     private static RenderItem.Colour kOrange = new RenderItem.Colour(1, 0.5F, 0, 1);
     private static RenderItem.Colour kBlue =  new RenderItem.Colour(0, 0, 1, 1);
@@ -1221,21 +1127,6 @@ public class PlayerActivity extends Activity {
         player = null; // we need to recreate the player with new playdata
     }
 
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-        if (super.onPrepareOptionsMenu(menu)) {
-            boolean canEnableSingleStaff =  isSelectedSinglePartWithMultiStaff();
-            MenuItem rItem = menu.findItem(R.id.RButton);
-            rItem.setTitle(playingRight ? "Ⓡ" : "r");
-            rItem.setEnabled(canEnableSingleStaff);
-            MenuItem lItem = menu.findItem(R.id.LButton);
-            lItem.setTitle(playingLeft ? "Ⓛ" : "l");
-            lItem.setEnabled(canEnableSingleStaff);
-            return true;
-        }
-        else
-            return false;
-    }
 
 	/**
 	 * called from the system to handle menu selection
@@ -1247,32 +1138,6 @@ public class PlayerActivity extends Activity {
 	        case R.id.nextfile:
 	            backgroundLoadNext();
 	            return true;
-
-	        case R.id.plus:
-	        	backgroundTranspose(+1);
-				return true;
-
-            case R.id.minus:
-                backgroundTranspose(-1);
-                return true;
-
-            case R.id.RButton:
-                playingRight = !playingRight;
-                item.setTitle(playingRight ? "Ⓡ" : "r");
-                if (player != null) {
-                    player.stop();
-                    player.restart(false);
-                }
-
-                return true;
-            case R.id.LButton:
-                playingLeft = !playingLeft;
-                item.setTitle(playingLeft ? "Ⓛ" : "l");
-                if (player != null) {
-                    player.stop();
-                    player.restart(false);
-                }
-                return true;
 
             case R.id.loopLButton:
                 setLoopL();

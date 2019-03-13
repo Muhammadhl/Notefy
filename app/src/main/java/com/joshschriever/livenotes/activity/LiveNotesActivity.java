@@ -7,7 +7,7 @@ import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.util.Pair;
+
 import android.view.WindowManager.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -109,8 +109,7 @@ public class LiveNotesActivity extends Activity
 
 
     private DurationHandler durationHandler;
-    private MusicXmlRenderer renderer;
-    private MusicXmlRenderer import_renderer;
+
 
     private Optional<LongTapAction> longTapAction = Optional.empty();
 
@@ -168,7 +167,7 @@ public class LiveNotesActivity extends Activity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (midiToXMLRenderer != null) {
-            midiToXMLRenderer.stopRecording();
+            //midiToXMLRenderer.stopRecording();
             if (longTapAction.map(action -> action.equals(LongTapAction.START)).orElse(false)) {
                 outState.putBoolean(KEY_CAN_START, true);
             } else {
@@ -372,6 +371,7 @@ public class LiveNotesActivity extends Activity
         stopRecording();
         saveScore();
     }
+
 
     private void addImportedNotes(){
 
