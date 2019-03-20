@@ -84,17 +84,23 @@ public class Server {
         String newName = filename.split("\\.")[0] + ".mxl";
         File file = new File("output//"+ filename.split("\\.")[0] + "//" + newName);
 
-        System.out.println("Sending file " + newName);
+
 
         try {
             byte[] fileContent = Files.readAllBytes(file.toPath());
-
+            System.out.println("Sending file " + newName);
+            bw.writeUTF("SUCCESS");
             bw.writeInt(fileContent.length);
             bw.writeUTF(file.getName());
             bw.write(fileContent);
             bw.flush();
 
         } catch (IOException e) {
+            try {
+                bw.writeUTF("FAIL");
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
             e.printStackTrace();
         }
     }
