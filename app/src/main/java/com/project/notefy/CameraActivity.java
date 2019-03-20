@@ -59,7 +59,7 @@ public class CameraActivity extends AppCompatActivity {
         switch (requestCode) {
             case TAKE_PICTURE: {
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri selectedImage = imageUri;
+
                     try {
                         //call the standard crop action intent (the user device may not support it)
                         Intent cropIntent = new Intent("com.android.camera.action.CROP");
@@ -81,6 +81,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
             }
             case PIC_CROP: {
+
                 finish();
             }
         }

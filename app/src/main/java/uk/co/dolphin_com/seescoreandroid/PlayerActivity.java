@@ -44,6 +44,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
@@ -217,6 +218,7 @@ public class PlayerActivity extends Activity {
                     showScore(currentScore, null); // toggle single part or all parts on long tap
             }
         });
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_player);
         //TextView versionText = (TextView)findViewById(R.id.versionLabel);
         //versionText.setText("SeeScoreLib Version:" + SScore.getVersion().toString());
@@ -502,7 +504,7 @@ public class PlayerActivity extends Activity {
 	 */
 	private void showTitle(SScore score) {
 		TextView titleLabel = (TextView) findViewById(R.id.titleLabel);
-		titleLabel.setText(titleText(score));
+		titleLabel.setText(titleText(score).substring(0, titleText(score).lastIndexOf('.')));
 	}
 
     private void showBeat(int beat) {

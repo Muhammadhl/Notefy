@@ -3,6 +3,8 @@ package com.joshschriever.livenotes.fragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.SparseIntArray;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.NumberPicker;
 import android.widget.ToggleButton;
 
 
+import com.joshschriever.livenotes.activity.LiveNotesActivity;
 import com.joshschriever.livenotes.musicxml.KeySigHandler;
 import com.project.notefy.R;
 
@@ -28,6 +31,8 @@ public class ChooseFileFragment extends DialogFragment
     private NumberPicker file_name;
     String[] files_list = getExternalStoragePublicDirectory("Notefy/Scores").list();
 
+
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new AlertDialog.Builder(getContext())
@@ -42,6 +47,7 @@ public class ChooseFileFragment extends DialogFragment
         return dialog;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -52,7 +58,10 @@ public class ChooseFileFragment extends DialogFragment
 
 
 
+        for(int i = 0; i < files_list.length; i++) {
 
+            files_list[i] = files_list[i].substring(0, files_list[i].lastIndexOf('.'));
+        }
         file_name = (NumberPicker) dialog.findViewById(R.id.key);
         file_name.setWrapSelectorWheel(false);
         file_name.setMinValue(0);
@@ -80,7 +89,7 @@ public class ChooseFileFragment extends DialogFragment
 
         }
         else {
-            ((Callbacks) getActivity()).onFileSet(files_list[file_name.getValue()], false);
+            ((Callbacks) getActivity()).onFileSet(files_list[file_name.getValue()]+".xml", false);
         }
         dismiss();
     }

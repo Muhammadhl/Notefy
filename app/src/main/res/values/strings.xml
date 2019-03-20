@@ -126,9 +126,9 @@
     <string name="add_note">Long press to add new note</string>
     <string name="test">test</string>
 
-    <string name="save_musicxml_file">Save MusicXML File</string>
+    <string name="save_musicxml_file">Save Score</string>
     <string name="storage_dir">&storagedir;</string>
-    <string name="save_score_as">Save this score as \"/&storagedir;/%1$s\"?</string>
+    <string name="save_score_as">Save this score as</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="error_saving">Error saving file</string>

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.project.notefy.R;
 
 import com.afollestad.dragselectrecyclerview.DragSelectRecyclerView;
@@ -37,6 +40,8 @@ import java.util.ArrayList;
 
 import uk.co.dolphin_com.seescoreandroid.PlayerActivity;
 
+import static java.lang.Thread.sleep;
+
 
 public class GalleryGridActivity extends AppCompatActivity
         implements ClickListener, DragSelectRecyclerViewAdapter.SelectionListener {
@@ -49,8 +54,9 @@ public class GalleryGridActivity extends AppCompatActivity
     private boolean selectionMode = false;
     private ImageLoader mImageLoader;
     private ImageSize mTargetSize;
-    private SharedPreferences mSharedPref;
     private TCPClient client;
+    private ConnectTask task;
+
     @Override
     public void onClick(int index) {
         if (selectionMode) {
@@ -196,8 +202,6 @@ public class GalleryGridActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
 
         setContentView(R.layout.activity_gallery);
 
@@ -323,7 +327,7 @@ public class GalleryGridActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public class ConnectTask extends AsyncTask<Void, Void, Void> {
+    public class ConnectTask extends AsyncTask<Void, Void, Integer> {
 
         private String filepath;
 
@@ -340,28 +344,74 @@ public class GalleryGridActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.dialog.setMessage("Processing...");
+            this.dialog.setMessage("Connecting...");
             this.dialog.show();
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-
+        protected void onPostExecute(Integer result) {
             this.dialog.dismiss();
             Intent intent = new Intent(GalleryGridActivity.this, PlayerActivity.class);
             startActivity(intent);
         }
 
         @Override
-        protected Void doInBackground(Void... path) {
+        protected void onCancelled(Integer result) {
+            if(result == 1) {
+                dialog.dismiss();
+                final AlertDialog.Builder server_dialog = new AlertDialog.Builder(GalleryGridActivity.this)
+                        .setTitle("Server Connection Failed").setMessage(
+                                "Please try again later.");
+                server_dialog.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                final AlertDialog alert = server_dialog.create();
+                alert.show();
+            }
+            if(result == 2) {
+                dialog.dismiss();
+                final AlertDialog.Builder fail_dialog = new AlertDialog.Builder(GalleryGridActivity.this)
+                        .setTitle("File Conversion Failed").setMessage(
+                                "Please try again with better image.");
+                fail_dialog.setPositiveButton("Ok",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                final AlertDialog alert = fail_dialog.create();
+                alert.show();
+            }
+        }
+
+        @Override
+        protected Integer doInBackground(Void... path) {
 
             //we create a TCPClient object
             client = new TCPClient();
-            client.OpenConnection();
+            try {
+                client.OpenConnection();
+            } catch (TCPException e) {
+                task.cancel(true);
+                return 1;
+            }
+            dialog.setMessage("Processing...");
             client.SendFile(filepath);
-            client.ReceiveFile();
+            try {
+                client.ReceiveFile();
+            } catch (TCPException e) {
+                task.cancel(true);
+                return 2;
+            }
             client.CloseConnection();
-            return null;
+            return 0;
         }
 /*
         @Override
@@ -378,7 +428,8 @@ public class GalleryGridActivity extends AppCompatActivity
         ArrayList<String> selectedFiles = myThumbAdapter.getSelectedFiles();
 
         if (selectedFiles.size() == 1) {
-            new ConnectTask(selectedFiles.get(0)).execute();
+            task = new ConnectTask(selectedFiles.get(0));
+            task.execute();
             //client.SendFile(new File("file://" + selectedFiles.get(0)).getPath());
             //client.SendFile();
 

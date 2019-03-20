@@ -20,10 +20,7 @@ import com.joshschriever.livenotes.fragment.TimeDialogFragment;
 import com.joshschriever.livenotes.fragment.ChooseFileFragment;
 import com.joshschriever.livenotes.midi.AdaptedMidiMessage;
 import com.joshschriever.livenotes.musicxml.DurationHandler;
-import com.joshschriever.livenotes.musicxml.KeySigHandler;
 import com.joshschriever.livenotes.musicxml.MidiToXMLRenderer;
-import com.joshschriever.livenotes.musicxml.MusicXmlRenderer;
-import com.joshschriever.livenotes.musicxml.Note;
 import com.joshschriever.livenotes.musicxml.SimpleNote;
 import com.project.notefy.R;
 
@@ -237,6 +234,7 @@ public class LiveNotesActivity extends Activity
         scrollView.addView(scoreView);
     }
 
+
     @Override
     public void onFileSet(String filename, boolean new_file) {
         if(new_file) {
@@ -298,6 +296,8 @@ public class LiveNotesActivity extends Activity
                     forEach(measure ->
                             streamElements(measure.getChildElements("note")).filter(negate(isRest)).
                                     forEach(note -> notes_to_import.add(elementToNote(note))));
+
+
 
 
         } catch (ParsingException e) {
@@ -366,6 +366,8 @@ public class LiveNotesActivity extends Activity
         dialog = new MyCustomDialog();
         dialog.show(getFragmentManager(), "MyCustomDialog");
     }
+
+
     @Override
     public void chooseSave() {
         stopRecording();
